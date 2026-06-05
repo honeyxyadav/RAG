@@ -1,0 +1,27 @@
+# RAG PDF Chatbot — Backend Dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Web Framework ──────────────────────────────────────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.30.1      # ASGI server to run FastAPI
+python-multipart==0.0.9        # Required for file uploads in FastAPI
+
+# ── LangChain Core ────────────────────────────────────────────────────────────
+langchain==0.2.5
+langchain-community==0.2.5     # Community integrations (Ollama, FAISS, HuggingFace)
+
+# ── PDF Parsing ────────────────────────────────────────────────────────────────
+pypdf==4.2.0                   # PyPDFLoader dependency
+
+# ── Embeddings (local, no API key needed) ─────────────────────────────────────
+sentence-transformers==3.0.1   # HuggingFace sentence-transformers
+huggingface-hub==0.23.4
+
+# ── Vector Database ────────────────────────────────────────────────────────────
+faiss-cpu==1.8.0               # FAISS for CPU (use faiss-gpu if you have CUDA)
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+pydantic==2.7.4                # Data validation (bundled with FastAPI)
+python-dotenv==1.0.1           # For environment variables (Grok API key)
+openai==1.12.0                 # For Grok API (xAI uses OpenAI-compatible API)
+langchain-openai==0.1.22       # LangChain integration for OpenAI-compatible APIs

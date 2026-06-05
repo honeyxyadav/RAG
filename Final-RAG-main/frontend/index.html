@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG Chat — Talk to your PDF</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google Fonts: Syne (display) + JetBrains Mono (code/mono feel) -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">RAG<em>chat</em></span>
+      </div>
+      <p class="tagline">Local AI · Zero Cloud</p>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-section">
+      <label class="upload-label">PDF Document</label>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="pdfInput" accept=".pdf" hidden />
+        <div class="upload-icon">⬆</div>
+        <p class="upload-hint">Drop PDF here<br/>or <span class="underline">click to browse</span></p>
+      </div>
+
+      <!-- Upload status -->
+      <div id="uploadStatus" class="upload-status hidden">
+        <div class="status-bar">
+          <div class="status-fill" id="statusFill"></div>
+        </div>
+        <p id="statusText" class="status-text">Processing…</p>
+      </div>
+
+      <!-- File info card (shown after upload) -->
+      <div id="fileCard" class="file-card hidden">
+        <span class="file-icon">📄</span>
+        <div class="file-meta">
+          <p id="fileName" class="file-name">document.pdf</p>
+          <p id="fileChunks" class="file-chunks">— chunks indexed</p>
+        </div>
+        <button id="resetBtn" class="reset-btn" title="Remove & upload new PDF">✕</button>
+      </div>
+    </div>
+
+    <!-- Model info -->
+    <div class="model-info">
+      <p class="model-label">Engine</p>
+      <div class="model-badge">
+        <span class="pulse-dot"></span>
+        Ollama · llama3
+      </div>
+      <div class="model-badge embed-badge">
+        all-MiniLM-L6-v2
+      </div>
+      <div class="model-badge embed-badge">
+        FAISS vector store
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="how-it-works">
+      <p class="model-label">How it works</p>
+      <ol class="steps-list">
+        <li><span>1</span> Upload PDF</li>
+        <li><span>2</span> Text → chunks</li>
+        <li><span>3</span> Chunks → embeddings</li>
+        <li><span>4</span> Store in FAISS</li>
+        <li><span>5</span> Query → retrieve → LLM</li>
+      </ol>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════════ MAIN CHAT ══ -->
+  <main class="main">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1>PDF Chat</h1>
+        <div id="pdfBadge" class="pdf-badge hidden">
+          <span id="pdfBadgeName">—</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button id="clearChatBtn" class="icon-btn" title="Clear chat history">🗑</button>
+      </div>
+    </header>
+
+    <!-- Messages container -->
+    <div class="chat-container" id="chatContainer">
+
+      <!-- Empty state (shown before PDF upload) -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">⬡</div>
+        <h2>Ready to chat with your document</h2>
+        <p>Upload a PDF in the sidebar, then ask anything about its contents.<br/>
+           The AI answers <strong>only</strong> from your document — no hallucinations.</p>
+        <div class="example-pills">
+          <span class="pill" onclick="fillExample(this)">Summarize the main topics</span>
+          <span class="pill" onclick="fillExample(this)">What are the key findings?</span>
+          <span class="pill" onclick="fillExample(this)">List all recommendations</span>
+          <span class="pill" onclick="fillExample(this)">Explain the methodology</span>
+        </div>
+      </div>
+
+      <!-- Messages injected here by script.js -->
+    </div>
+
+    <!-- Sources panel (slides up when a response has sources) -->
+    <div class="sources-panel" id="sourcesPanel">
+      <button class="sources-toggle" id="sourcesToggle" onclick="toggleSources()">
+        <span id="sourcesToggleText">▸ View source chunks (0)</span>
+      </button>
+      <div class="sources-content" id="sourcesContent"></div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <div class="input-wrapper">
+        <textarea
+          id="questionInput"
+          class="question-input"
+          placeholder="Ask anything about your PDF…"
+          rows="1"
+          disabled
+        ></textarea>
+        <button id="sendBtn" class="send-btn" disabled>
+          <span id="sendIcon">↑</span>
+        </button>
+      </div>
+      <p class="input-hint">Answers are grounded strictly in the uploaded PDF.</p>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
