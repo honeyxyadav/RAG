@@ -12,7 +12,7 @@
 "use strict";
 
 // ── Config ───────────────────────────────────────────────────────────────────
-const API_BASE = "http://localhost:8000";   // Change if running on a different port
+const API_BASE = "https://rag-lwiy.onrender.com";   // Change if running on a different port
 
 // ── State ────────────────────────────────────────────────────────────────────
 let chatHistory = [];      // [{role: "user"|"assistant", content: "..."}]
